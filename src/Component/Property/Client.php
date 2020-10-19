@@ -22,13 +22,19 @@ final class Client
     }
 
     /**
-     * @param array $filter
+     * @param int $pageNr
+     * @param int $pageSize
      * @return PropertyDto[]
      * @throws PropertyClientException
      */
-    public function getProperties(array $filter = []): array
+    public function getProperties(int $pageNr = 1, int $pageSize = 30): array
     {
-        $data = $this->request('get', 'properties', $filter);
+        $data = $this->request('get', 'properties', [
+            'page' => [
+                'number' => $pageNr,
+                'size' => $pageSize,
+            ],
+        ]);
         $propertiesData = $data['data'] ?? [];
 
         $properties = [];

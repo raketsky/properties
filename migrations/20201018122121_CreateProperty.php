@@ -29,7 +29,7 @@ class CreateProperty extends Migration
             $table->string('country', 64);
             $table->string('town', 32);
             $table->text('description');
-            $table->string('address', 64);
+            $table->string('address', 128);
             $table->string('image_full', 128);
             $table->string('image_thumbnail', 128);
             $table->decimal('latitude', 10, 8);

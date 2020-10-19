@@ -18,17 +18,33 @@ class FetchDataCommand extends Command
         $propertyClient = new PropertyClient(getConfig('api_url'), getConfig('api_key'));
 
         $propertyService = new PropertyService();
-        $propertiesDto = $propertyClient->getProperties();
 
         $updatedAt = new \DateTimeImmutable();
-        foreach ($propertiesDto as $propertyDTO) {
-            try {
-                $output->write($propertyDTO->getUuid() . '..');
-                $propertyService->saveFromDto($propertyDTO, $updatedAt);
-                $output->writeln('OK');
-            } catch (\Throwable $e) {
-                $output->writeln('ERROR [' . $e->getMessage() . ']');
+        $pageNr = 1;
+        $itemsPerPage = 100;
+        $totalItemsFetched = 0;
+        while (true) {
+            $output->writeln('Fetching page ' . $pageNr);
+
+            $propertiesDto = $propertyClient->getProperties($pageNr, $itemsPerPage);
+            if (!$propertiesDto) {
+                break;
             }
+            $totalItemsFetched += count($propertiesDto);
+
+            foreach ($propertiesDto as $propertyDTO) {
+                try {
+                    $output->write($propertyDTO->getUuid() . '..');
+                    $propertyService->saveFromDto($propertyDTO, $updatedAt);
+                    $output->writeln('OK');
+                } catch (\Throwable $e) {
+                    $output->writeln('ERROR [' . $e->getMessage() . ']');
+                }
+            }
+
+            $output->writeln('Total fetched count: ' . $totalItemsFetched);
+            sleep(2);
+            $pageNr++;
         }
 
         $deletedPropertiesCount = $propertyService->removePropertiesOlderThan($updatedAt);

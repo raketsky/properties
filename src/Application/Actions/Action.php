@@ -45,9 +45,6 @@ abstract class Action
         $viewPath = sprintf('%s/resources/views/', APP_DIR);
         $cachePath = sprintf('%s/var/cache/', APP_DIR);
         $this->blade = new Blade($viewPath, $cachePath);
-        $this->blade->directive('money', function ($expression) {
-            return "<?php echo \Money\Money::EUR(((int){$expression}) / 100); ?>";
-        });
     }
 
     /**

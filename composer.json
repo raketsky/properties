@@ -62,8 +62,7 @@
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ],
         "post-install-cmd": [
-            "@build-params-scripts",
-			"@php vendor/bin/phpmig migrate"
+            "@build-params-scripts"
         ],
         "post-update-cmd": [
             "@build-params-scripts"

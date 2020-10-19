@@ -17,7 +17,7 @@ function getConfig($key, $default = null)
     return isset($config['settings'][$key]) ? $config['settings'][$key] : $default;
 }
 
-defined('IS_PROD') or define('IS_PROD', getConfig('env') === 'dev');
+defined('IS_PROD') or define('IS_PROD', getConfig('env') === 'prod');
 
 $capsule = new Capsule;
 $capsule->addConnection([
