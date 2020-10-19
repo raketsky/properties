@@ -22,14 +22,24 @@
         }
     ],
     "require": {
+        "php": "^7.4",
         "ext-json": "*",
+        "davedevelopment/phpmig": "^1.7",
+        "doctrine/annotations": "^1.10",
+        "guzzlehttp/guzzle": "^7.2",
+        "illuminate/database": "^8.10",
+        "incenteev/composer-parameter-handler": "^2.1",
+        "moneyphp/money": "^3.3",
         "monolog/monolog": "^2.0",
-        "php": "^7.2",
         "php-di/php-di": "^6.1",
         "slim/psr7": "^1.1",
-        "slim/slim": "^4.5"
+        "slim/slim": "^4.5",
+        "symfony/console": "^5.1",
+        "symfony/validator": "^5.1",
+        "symfony/yaml": "^5.1"
     },
     "require-dev": {
+        "larapack/dd": "^1.1",
         "phpunit/phpunit": "^8.5"
     },
     "config": {
@@ -47,7 +57,22 @@
         }
     },
     "scripts": {
+        "build-params-scripts": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-install-cmd": [
+            "@build-params-scripts",
+			"@php vendor/bin/phpmig migrate"
+        ],
+        "post-update-cmd": [
+            "@build-params-scripts"
+        ],
         "start": "php -S localhost:8080 -t public",
         "test": "phpunit"
+    },
+    "extra": {
+        "incenteev-parameters": [
+            {"file": "config/parameters.yml", "parameter-key": "settings"}
+        ]
     }
 }
