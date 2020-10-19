@@ -1,4 +1,5 @@
 settings:
+    env: dev
     db_driver: mysql
     db_host: db
     db_database: parameters

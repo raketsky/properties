@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-defined('APP_DIR') or define('APP_DIR', dirname(__FILE__));
-
 use Illuminate\Container\Container;
 use \Phpmig\Adapter;
 use Illuminate\Database\Capsule\Manager as Capsule;

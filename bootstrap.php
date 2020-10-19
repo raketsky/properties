@@ -1,19 +1,23 @@
 <?php
-date_default_timezone_set('Europe/Riga');
-
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Yaml\Yaml;
 
-require __DIR__ . '/vendor/autoload.php';
+defined('APP_DIR') or define('APP_DIR', dirname(__FILE__));
+
+date_default_timezone_set('Europe/Riga');
+
+require APP_DIR . '/vendor/autoload.php';
 
 function getConfig($key, $default = null)
 {
-    $config = Yaml::parse(file_get_contents(__DIR__ . '/config/parameters.yml'));
+    $config = Yaml::parse(file_get_contents(APP_DIR . '/config/parameters.yml'));
     if (!isset($config['settings']) || !$config['settings']) {
         return $default;
     }
     return isset($config['settings'][$key]) ? $config['settings'][$key] : $default;
 }
+
+defined('IS_PROD') or define('IS_PROD', getConfig('env') === 'dev');
 
 $capsule = new Capsule;
 $capsule->addConnection([

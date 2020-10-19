@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Domain\Property;
 
 use App\Component\Property\ValueObject\DealType;
+use App\Service\MoneyService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Money\Money;
@@ -41,6 +42,18 @@ class Property extends Model
 	{
 	    return new DealType($value);
 	}
+
+	public function getPriceFormatted()
+    {
+        $moneyService = new MoneyService();
+
+        return $moneyService->formatAmountAsDecimal($this->price);
+    }
+
+    public function getUrl()
+    {
+        return sprintf('/property/%d', $this->id);
+    }
 
     public function setPriceAttribute(Money $value): void
 	{

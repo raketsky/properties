@@ -29,6 +29,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "illuminate/database": "^8.10",
         "incenteev/composer-parameter-handler": "^2.1",
+        "jenssegers/blade": "^1.4",
         "moneyphp/money": "^3.3",
         "monolog/monolog": "^2.0",
         "php-di/php-di": "^6.1",

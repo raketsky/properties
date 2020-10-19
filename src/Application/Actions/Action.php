@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Application\Actions;
 
 use App\Domain\DomainException\DomainRecordNotFoundException;
+use Jenssegers\Blade\Blade;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -32,12 +33,21 @@ abstract class Action
      */
     protected $args;
 
+    protected Blade $blade;
+
     /**
      * @param LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
+
+        $viewPath = sprintf('%s/resources/views/', APP_DIR);
+        $cachePath = sprintf('%s/var/cache/', APP_DIR);
+        $this->blade = new Blade($viewPath, $cachePath);
+        $this->blade->directive('money', function ($expression) {
+            return "<?php echo \Money\Money::EUR(((int){$expression}) / 100); ?>";
+        });
     }
 
     /**
@@ -67,6 +77,14 @@ abstract class Action
      * @throws HttpBadRequestException
      */
     abstract protected function action(): Response;
+
+    protected function render(string $view, array $properties = []): Response
+    {
+        $data = $this->blade->render($view, $properties);
+        $this->response->getBody()->write($data);
+
+        return $this->response;
+    }
 
     /**
      * @return array|object
